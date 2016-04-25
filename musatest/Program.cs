@@ -1,11 +1,7 @@
 ﻿using AgentLibrary;
 using MusaCommon;
 using MusaLogger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MusaInitializer;
 
 namespace musatest
 {
@@ -13,16 +9,24 @@ namespace musatest
     {
         static void Main(string[] args)
         {
-            MusaInitializer.MUSAInitializer.Initialize();
+            //Initialize MUSA
+            MUSAInitializer.Initialize();
 
+            //Add a console logger
             ModuleProvider.Get().Resolve<ILogger>().AddFragment(new ConsoleLoggerFragment());
+
+            /* FILE LOGGING
             ModuleProvider.Get().Resolve<ILogger>().AddFragment(new FileLoggerFragment());
-            ModuleProvider.Get().Resolve<ILogger>().GetFragment<IFileLoggerFragment>().SetFilename(@"C:\\Users\davide\Documents\musa_log.txt");
+            ModuleProvider.Get().Resolve<ILogger>().GetFragment<IFileLoggerFragment>().SetFilename(@"/tmp/musa_log.txt"); */
+
+            //Set the minimum log level to INFO
             ModuleProvider.Get().Resolve<ILogger>().SetMinimumLogLevel(2);
 
-            AgentEnvironement env = AgentEnvironement.GetInstance();
+            //Discover the agents within this project
+            MUSAInitializer.DiscoverAgents();
 
-            env.WaitForAgents();
+            //Wait for agents
+            AgentEnvironement.GetRootEnv().WaitForAgents();
         }
     }
 }

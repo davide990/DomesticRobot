@@ -1,16 +1,9 @@
 ﻿using AgentLibrary;
 using AgentLibrary.Attributes;
 using MusaCommon;
-using MusaCommon.Common.Agent.Networking;
 using PlanLibrary;
 using PlanLibrary.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
 
 namespace domesticRobot.agents
 {
@@ -39,7 +32,7 @@ namespace domesticRobot.agents
                 //has(owner,product)
                 Logger.Log(LogLevel.Info, string.Format("[{0}] I'm going to give {1} {2}", Parent.GetName(), qty, received_product));
                 AgentMessage msg = new AgentMessage(string.Format("has(owner,\"{0}\")", received_product), InformationType.Tell);
-                Parent.SendMessage("Owner", msg);
+                Parent.SendLocalMessage("Owner", msg);
             }
         }
 
@@ -59,8 +52,8 @@ namespace domesticRobot.agents
             {
                 AgentMessage msg = new AgentMessage(string.Format("order(\"{0}\",{1})", args.GetArg<string>("product"), args.GetArg<int>("quantity")), InformationType.Achieve);
                 
-                Logger.Log(LogLevel.Info, string.Format("[{0}] I'm going to buy ", Parent.GetName(), args.GetArg<string>("product")));
-                Parent.SendMessage("Supermarket", msg);
+                Logger.Log(LogLevel.Info, string.Format("[{0}] I'm going to buy {1}", Parent.GetName(), args.GetArg<string>("product")));
+                Parent.SendLocalMessage("Supermarket", msg);
             }
         }
     }

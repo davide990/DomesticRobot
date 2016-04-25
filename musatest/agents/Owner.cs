@@ -2,11 +2,6 @@
 using AgentLibrary.Attributes;
 using MusaCommon;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MusaCommon.Common.Agent.Networking;
 using PlanLibrary;
 using System.Threading;
 using PlanLibrary.Attributes;
@@ -25,7 +20,7 @@ namespace domesticRobot.agents
             AchieveGoal(typeof(check_bored));
         }
 
-        [Plan]//("!has(owner,product)")]
+        [Plan]
         public class check_bored : PlanModel
         {
             [PlanEntryPoint]
@@ -34,21 +29,12 @@ namespace domesticRobot.agents
                 var rand = new Random().Next(1, 5);
 
                 Logger.Log(LogLevel.Info, string.Format("[{0}] I'm bored...", Parent.GetName()));
-
-                Console.WriteLine("--> " + rand * 1000);
                 Thread.Sleep(rand * 1000);
-                /*if (rand > 2)
-                {
-                    Console.WriteLine("Achieving get");
-                    Parent.AchieveGoal(typeof(get));
-                }
-
-                Console.WriteLine("Achieving check bored");*/
                 Parent.AchieveGoal(typeof(check_bored));
             }
         }
 
-        [Plan]//("!has(owner,product)")]
+        [Plan]
         public class get : PlanModel
         {
             [PlanEntryPoint]
@@ -57,12 +43,12 @@ namespace domesticRobot.agents
                 Logger.Log(LogLevel.Info, string.Format("[{0}] Robot, go buy me some beer!", Parent.GetName()));
                 
                 AgentMessage mm = new AgentMessage(string.Format("buy(\"{0}\",{1})", "beer", 1), InformationType.Achieve);
-                Parent.SendMessage("Robot", mm);
+                Parent.SendLocalMessage("Robot", mm);
             }
         }
 
-        [Plan]//("has(owner,product)", typeof(check_bored))]
-        [Parameter("product","quantity")]
+        [Plan]
+        [Parameter("product", "quantity")]
         public class drink : PlanModel
         {
             [PlanEntryPoint]
